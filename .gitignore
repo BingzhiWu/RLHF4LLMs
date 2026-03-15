@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+
+# Notebook and training artifacts
+outputs/*
+!outputs/README.md
+results/*
+!results/README.md
+
+# Experiment run directories created by notebooks
+sft_baseline_lora/
+sft_baseline_qwen25_1p5b_lora/
+reward_model_hh_rlhf_lora/
+reward_model_hh_rlhf_qwen25_1p5b_lora/
+reward_model_helpsteer2_lora/
+ppo_minimal_lora/
+ppo_minimal_qwen25_1p5b_lora/
+ppo_hh_rlhf_qwen25_1p5b_lora/
+compare_results_*/
+
+# Common ML outputs
+**/checkpoints/
+**/checkpoint-*/
+**/final_model/
+**/tb_logs/
+**/runs/
+*.log
