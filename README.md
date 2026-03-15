@@ -94,7 +94,7 @@ If Colab asks for a runtime restart after installation, restart the runtime and 
 
 ## 5. Running the Project
 
-### Option A: Google Colab
+### Google Colab
 
 This project is most naturally run in Colab. The notebooks already include:
 
@@ -131,12 +131,12 @@ When the notebooks are run in Google Colab, these directories are typically save
 
 ![Example Google Drive root with saved experiment folders](doc/Result1.png)
 
-These run directories typically contain:
+Each model typically contain:
 
-- `checkpoints/`
-- `final_model/`
-- `results/`
-- `tb_logs/` or other logs
+- `checkpoints/` save checkpoints of model during train process
+- `final_model/` save final model
+- `results/` save training metrics
+- `tensorboard_exports/` save figures, which may need to run 04_Compare_Results_HH_RLHF.ipynb
 
 ![Example run directory contents in Google Drive](doc/Result2.png)
 
