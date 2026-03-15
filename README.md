@@ -93,7 +93,7 @@ The notebooks already contain package installation cells, so no manual environme
 
 If Colab asks for a runtime restart after installation, restart the runtime and continue running the notebook from the next required step.
 
-![Connect and run the notebook in Colab](doc/Step3_4.png)
+
 
 ## 5. Running the Project
 
@@ -110,6 +110,9 @@ This means:
 
 - Each stage writes its training results to Google Drive
 - When the notebooks are run in Colab, the saved models, checkpoints, logs, and result files are stored in Google Drive rather than only inside the temporary Colab session
+
+![Connect and run the notebook in Colab](doc/Step3_4.png)
+
 
 After running notebooks, experiment directories such as the following will be created:
 
