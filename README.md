@@ -1,8 +1,8 @@
 # RLHF4LLMs
 
-Project paper: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
+Associated project report: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
 
-This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. The project is notebook-based and is intended to be easy to run step by step in either Google Colab or a local Python environment.
+This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. The project is notebook-based and is intended to be run step by step in Google Colab.
 
 The internal notebook logic has been kept unchanged. This cleanup focuses only on repository-level documentation and project organization so the work is easier to understand, reproduce, deploy, and share.
 
@@ -64,7 +64,7 @@ The repository currently includes both 0.5B and 1.5B experiment tracks organized
 Notes:
 
 - `Anthropic/hh-rlhf` may contain harmful, unsafe, or offensive content, which is normal for preference-learning benchmarks.
-- The repository does not store local dataset copies. Datasets are downloaded through Hugging Face `datasets`.
+- The repository does not store dataset copies locally. Datasets are downloaded through Hugging Face `datasets`.
 
 ## 5. Environment Setup
 
@@ -78,6 +78,8 @@ The recommended workflow for this project is to run the notebooks in Google Cola
    - Upload the `.ipynb` files from this repository directly into Colab
    - Upload the repository to Google Drive first, then open the notebooks from Drive in Colab
 4. When prompted, allow Colab to connect to Google Drive so saved models and results can persist across sessions.
+
+![Change runtime type in Colab](doc/Step1.png)
 
 ### Recommended notebook access pattern
 
@@ -101,6 +103,8 @@ When opening a notebook in Colab, enable a GPU runtime:
 2. Set `Hardware accelerator` to `GPU`
 3. Save and reconnect the session
 
+![Select a GPU runtime in Colab](doc/Step2.png)
+
 Performance expectations:
 
 - 0.5B track: the most practical option for coursework replication, faster iteration, and lower VRAM usage
@@ -118,6 +122,8 @@ Practical recommendation:
 The notebooks already contain package installation cells, so no manual environment setup is required before opening them in the browser.
 
 If Colab asks for a runtime restart after installation, restart the runtime and continue running the notebook from the next required step.
+
+![Connect and run the notebook in Colab](doc/Step3_4.png)
 
 ## 6. Running the Project
 
@@ -141,16 +147,6 @@ This means:
 - PPO and comparison notebooks load model outputs saved by earlier stages
 - When the notebooks are run in Colab, the saved models, checkpoints, logs, and result files are stored in Google Drive rather than only inside the temporary Colab session
 
-### Option B: Local execution
-
-The notebooks also support local execution, but the path assumptions differ slightly from Colab:
-
-- The notebooks are now grouped under `notebooks/` by stage
-- The training artifacts are still intended to be created as run directories such as `sft_baseline_lora/`, `reward_model_hh_rlhf_lora/`, and `ppo_minimal_lora/`
-- Some notebook path logic was originally written for a flatter layout, so local runs should be checked carefully before launching long jobs
-
-If a notebook assumes the repository root as `BASE_ROOT`, make sure your local execution setup matches that expectation.
-
 ## 7. Repository Structure
 
 The repository currently follows a stage-based notebook layout:
@@ -160,6 +156,12 @@ RLHF4LLMs/
 ├── README.md
 ├── requirements.txt
 ├── .gitignore
+├── doc/
+│   ├── Step1.png
+│   ├── Step2.png
+│   ├── Step3_4.png
+│   ├── Result1.png
+│   └── Result2.png
 └── notebooks/
     ├── sft/
     │   ├── 01_SFT_Baseline.ipynb
@@ -188,10 +190,9 @@ ppo_hh_rlhf_qwen25_1p5b_lora/
 compare_results_.../
 ```
 
-Where these directories are stored depends on the runtime:
+When the notebooks are run in Google Colab, these directories are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`.
 
-- In Google Colab, they are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`
-- In local execution, they are typically created under the local repository root
+![Example Google Drive root with saved experiment folders](doc/Result1.png)
 
 These run directories typically contain:
 
@@ -199,6 +200,8 @@ These run directories typically contain:
 - `final_model/`
 - `results/`
 - `tb_logs/` or other logs
+
+![Example run directory contents in Google Drive](doc/Result2.png)
 
 ## 8. Outputs
 
@@ -240,7 +243,7 @@ To keep the resulting directory structure consistent with this project, it is re
 
 1. Keep the notebook `RUN_NAME` values unchanged
 2. Run notebooks in stage order
-3. Use the same Drive root or the same local repository root throughout the workflow
+3. Use the same Google Drive root throughout the workflow
 4. Preserve each stage's `final_model/` and `results/` directories
 
 ## 10. Cross-Platform Notes
@@ -265,7 +268,7 @@ This makes the project broadly usable from:
 - ChromeOS
 - other browser-capable systems
 
-Because the main execution environment is Colab, local differences in Python setup, CUDA installation, and package compatibility are less important than they would be in a fully local workflow.
+Because the main execution environment is Colab, local differences in Python setup, CUDA installation, and package compatibility are not the main concern for reproduction.
 
 ## 11. Sharing and Submission Guidance
 
@@ -279,4 +282,4 @@ To keep the repository as a reproducible working repository instead of a model-a
 
 - The project is notebook-first, not a packaged Python module
 - No dataset copies are bundled in the repository
-- The notebooks are organized more cleanly now, but some path logic may still assume a repository-root execution context
+- The workflow is documented for Colab-first execution and Google Drive-based storage
