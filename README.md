@@ -2,9 +2,10 @@
 
 Associated project paper: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
 
-This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. The project is notebook-based and is intended to be run step by step in Google Colab.
+This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. 
 
-The internal notebook logic has been kept unchanged. This cleanup focuses only on repository-level documentation and project organization so the work is easier to understand, reproduce, deploy, and share.
+
+The project is notebook-based and is intended to be run step by step in Google Colab.
 
 ## 1. Notebook Overview
 
@@ -46,8 +47,10 @@ The repository currently includes both 0.5B and 1.5B experiment tracks organized
 
 ### Datasets
 
-- SFT: `tatsu-lab/alpaca`
-- Reward modeling / comparison: `Anthropic/hh-rlhf`
+- `tatsu-lab/alpaca`
+- `Anthropic/hh-rlhf`
+
+
 Notes:
 
 - `Anthropic/hh-rlhf` may contain harmful, unsafe, or offensive content, which is normal for preference-learning benchmarks.
@@ -96,22 +99,16 @@ If Colab asks for a runtime restart after installation, restart the runtime and 
 
 ### Google Colab
 
-This project is most naturally run in Colab. The notebooks already include:
+This project is recommended to run in Colab. The notebooks already include:
 
 - Colab environment detection
 - Google Drive mount logic
 - Automatic output directory creation
 
-The default Colab root path is:
-
-```text
-/content/drive/MyDrive/RLHF4LLMs
-```
 
 This means:
 
-- Each stage writes its training artifacts to Google Drive
-- PPO and comparison notebooks load model outputs saved by earlier stages
+- Each stage writes its training results to Google Drive
 - When the notebooks are run in Colab, the saved models, checkpoints, logs, and result files are stored in Google Drive rather than only inside the temporary Colab session
 
 After running notebooks, experiment directories such as the following will be created:
@@ -127,7 +124,7 @@ ppo_hh_rlhf_qwen25_1p5b_lora/
 compare_results_.../
 ```
 
-When the notebooks are run in Google Colab, these directories are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`.
+Usually inside `/content/drive/MyDrive/RLHF4LLMs`.
 
 ![Example Google Drive root with saved experiment folders](doc/Result1.png)
 
