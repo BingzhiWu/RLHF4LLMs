@@ -1,25 +1,12 @@
 # RLHF4LLMs
 
-Associated project report: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
+Associated project paper: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
 
 This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. The project is notebook-based and is intended to be run step by step in Google Colab.
 
 The internal notebook logic has been kept unchanged. This cleanup focuses only on repository-level documentation and project organization so the work is easier to understand, reproduce, deploy, and share.
 
-## 1. Project Scope
-
-The repository contains four main experiment stages:
-
-1. `notebooks/sft/*.ipynb`
-   Fine-tunes a base language model with SFT and produces a LoRA adapter that can be used as the starting policy for PPO.
-2. `notebooks/reward_model/*.ipynb`
-   Trains a reward model on preference data to distinguish better and worse responses.
-3. `notebooks/PPO/*.ipynb`
-   Runs PPO alignment using the saved SFT model and reward model.
-4. `notebooks/analysis/04_Compare_Results_HH_RLHF.ipynb`
-   Compares the base model, SFT model, and PPO model and exports consolidated results.
-
-## 2. Notebook Overview
+## 1. Notebook Overview
 
 The repository currently includes both 0.5B and 1.5B experiment tracks organized by stage:
 
@@ -34,7 +21,7 @@ The repository currently includes both 0.5B and 1.5B experiment tracks organized
 | `notebooks/PPO/03_PPO_HH_RLHF_1p5B.ipynb` | 1.5B PPO with HH-RLHF prompts | Depends on 1.5B SFT + RM outputs |
 | `notebooks/analysis/04_Compare_Results_HH_RLHF.ipynb` | Unified comparison and export | Compares base / SFT / PPO |
 
-## 3. Recommended Execution Order
+## 2. Recommended Execution Order
 
 ### 0.5B main track
 
@@ -50,7 +37,7 @@ The repository currently includes both 0.5B and 1.5B experiment tracks organized
 3. Run `03_PPO_1p5B.ipynb` or `03_PPO_HH_RLHF_1p5B.ipynb`
 4. Run `04_Compare_Results_HH_RLHF.ipynb`
 
-## 4. Models and Datasets
+## 3. Models and Datasets
 
 ### Base models
 
@@ -66,7 +53,7 @@ Notes:
 - `Anthropic/hh-rlhf` may contain harmful, unsafe, or offensive content, which is normal for preference-learning benchmarks.
 - The repository does not store dataset copies locally. Datasets are downloaded through Hugging Face `datasets`.
 
-## 5. Environment Setup
+## 4. Environment Setup
 
 ### Open Google Colab in the browser
 
@@ -81,20 +68,6 @@ The recommended workflow for this project is to run the notebooks in Google Cola
 
 ![Change runtime type in Colab](doc/Step1.png)
 
-### Recommended notebook access pattern
-
-Because the notebooks save intermediate models and results across multiple stages, the cleanest setup is:
-
-- keep the repository files together in one Google Drive folder
-- open notebooks from that same folder in Colab
-- run the notebooks in stage order so later notebooks can find earlier outputs
-
-The notebooks are designed around the default Colab storage root:
-
-```text
-/content/drive/MyDrive/RLHF4LLMs
-```
-
 ### Runtime and performance guidance
 
 When opening a notebook in Colab, enable a GPU runtime:
@@ -104,12 +77,6 @@ When opening a notebook in Colab, enable a GPU runtime:
 3. Save and reconnect the session
 
 ![Select a GPU runtime in Colab](doc/Step2.png)
-
-Performance expectations:
-
-- 0.5B track: the most practical option for coursework replication, faster iteration, and lower VRAM usage
-- 1.5B track: significantly heavier, slower, and more sensitive to available GPU memory
-- PPO notebooks: usually the most expensive stage because they depend on both prior model outputs and reinforcement-learning training
 
 Practical recommendation:
 
@@ -125,7 +92,7 @@ If Colab asks for a runtime restart after installation, restart the runtime and 
 
 ![Connect and run the notebook in Colab](doc/Step3_4.png)
 
-## 6. Running the Project
+## 5. Running the Project
 
 ### Option A: Google Colab
 
@@ -147,7 +114,33 @@ This means:
 - PPO and comparison notebooks load model outputs saved by earlier stages
 - When the notebooks are run in Colab, the saved models, checkpoints, logs, and result files are stored in Google Drive rather than only inside the temporary Colab session
 
-## 7. Repository Structure
+After running notebooks, experiment directories such as the following will be created:
+
+```text
+sft_baseline_lora/
+reward_model_hh_rlhf_lora/
+ppo_minimal_lora/
+sft_baseline_qwen25_1p5b_lora/
+reward_model_hh_rlhf_qwen25_1p5b_lora/
+ppo_minimal_qwen25_1p5b_lora/
+ppo_hh_rlhf_qwen25_1p5b_lora/
+compare_results_.../
+```
+
+When the notebooks are run in Google Colab, these directories are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`.
+
+![Example Google Drive root with saved experiment folders](doc/Result1.png)
+
+These run directories typically contain:
+
+- `checkpoints/`
+- `final_model/`
+- `results/`
+- `tb_logs/` or other logs
+
+![Example run directory contents in Google Drive](doc/Result2.png)
+
+## 6. Repository Structure
 
 The repository currently follows a stage-based notebook layout:
 
@@ -177,76 +170,7 @@ RLHF4LLMs/
         └── 04_Compare_Results_HH_RLHF.ipynb
 ```
 
-After running notebooks, experiment directories such as the following will be created:
-
-```text
-sft_baseline_lora/
-reward_model_hh_rlhf_lora/
-ppo_minimal_lora/
-sft_baseline_qwen25_1p5b_lora/
-reward_model_hh_rlhf_qwen25_1p5b_lora/
-ppo_minimal_qwen25_1p5b_lora/
-ppo_hh_rlhf_qwen25_1p5b_lora/
-compare_results_.../
-```
-
-When the notebooks are run in Google Colab, these directories are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`.
-
-![Example Google Drive root with saved experiment folders](doc/Result1.png)
-
-These run directories typically contain:
-
-- `checkpoints/`
-- `final_model/`
-- `results/`
-- `tb_logs/` or other logs
-
-![Example run directory contents in Google Drive](doc/Result2.png)
-
-## 8. Outputs
-
-Different notebooks export different result files, for example:
-
-- `dataset_info.json`
-- `train_metrics.json`
-- `eval_metrics.json`
-- `save_info.json`
-- `base_samples.json`
-- `sft_samples.json`
-- `paired_samples.json`
-- `rm_pair_scores.json`
-- `before_ppo_samples.json`
-- `ppo_log_history.json`
-- `ppo_sample_comparison.json`
-- comparison `.csv` / `.json` summary files
-
-These outputs support:
-
-- training traceability
-- sample-level qualitative analysis
-- cross-stage model comparison
-- report writing and result visualization
-
-## 9. Reproducibility Notes
-
-The notebooks already include several features that support reproducibility:
-
-- fixed stage order
-- explicit `RUN_NAME` values
-- automatic directory creation
-- deterministic output file naming
-- TensorBoard logging
-- saved samples before and after training
-- JSON/CSV exports suitable for reports
-
-To keep the resulting directory structure consistent with this project, it is recommended to:
-
-1. Keep the notebook `RUN_NAME` values unchanged
-2. Run notebooks in stage order
-3. Use the same Google Drive root throughout the workflow
-4. Preserve each stage's `final_model/` and `results/` directories
-
-## 10. Cross-Platform Notes
+## 7. Cross-Platform Notes
 
 This project is primarily intended to run in Google Colab.
 
@@ -270,15 +194,7 @@ This makes the project broadly usable from:
 
 Because the main execution environment is Colab, local differences in Python setup, CUDA installation, and package compatibility are not the main concern for reproduction.
 
-## 11. Sharing and Submission Guidance
-
-To keep the repository as a reproducible working repository instead of a model-artifact dump:
-
-- track notebooks, `README.md`, `requirements.txt`, and small report-ready outputs in Git
-- exclude large checkpoints, caches, and intermediate model artifacts from version control
-- if results need to be shared, prefer compact `results/*.json` or `results/*.csv` exports
-
-## 12. Current Boundaries
+## 8. Current Boundaries
 
 - The project is notebook-first, not a packaged Python module
 - No dataset copies are bundled in the repository
