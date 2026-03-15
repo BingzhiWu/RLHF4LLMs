@@ -1,5 +1,7 @@
 # RLHF4LLMs
 
+Project paper: [Overleaf manuscript](https://www.overleaf.com/7793569333nsvdtsgrsdvh#92703f)
+
 This repository is a reproducible RLHF coursework/experiment workspace covering the full pipeline from supervised fine-tuning (SFT), to reward modeling (RM), to PPO alignment, and finally cross-stage result comparison. The project is notebook-based and is intended to be easy to run step by step in either Google Colab or a local Python environment.
 
 The internal notebook logic has been kept unchanged. This cleanup focuses only on repository-level documentation and project organization so the work is easier to understand, reproduce, deploy, and share.
@@ -66,33 +68,56 @@ Notes:
 
 ## 5. Environment Setup
 
-### Python version
+### Open Google Colab in the browser
 
-Recommended:
+The recommended workflow for this project is to run the notebooks in Google Colab.
 
-- Python `3.10` or `3.11`
+1. Open [Google Colab](https://colab.research.google.com/) in your browser.
+2. Sign in with the Google account that has access to your Google Drive.
+3. Choose one of the following ways to open the notebooks:
+   - Upload the `.ipynb` files from this repository directly into Colab
+   - Upload the repository to Google Drive first, then open the notebooks from Drive in Colab
+4. When prompted, allow Colab to connect to Google Drive so saved models and results can persist across sessions.
 
-### Install dependencies
+### Recommended notebook access pattern
 
-The repository includes a `requirements.txt`:
+Because the notebooks save intermediate models and results across multiple stages, the cleanest setup is:
 
-```bash
-pip install -r requirements.txt
+- keep the repository files together in one Google Drive folder
+- open notebooks from that same folder in Colab
+- run the notebooks in stage order so later notebooks can find earlier outputs
+
+The notebooks are designed around the default Colab storage root:
+
+```text
+/content/drive/MyDrive/RLHF4LLMs
 ```
 
-The original notebook install cells are also preserved, so:
+### Runtime and performance guidance
 
-- In Colab, you can run the notebooks directly cell by cell
-- In a local environment, it is better to install `requirements.txt` first and then run the notebooks
+When opening a notebook in Colab, enable a GPU runtime:
 
-### GPU recommendation
+1. In Colab, open `Runtime` -> `Change runtime type`
+2. Set `Hardware accelerator` to `GPU`
+3. Save and reconnect the session
 
-A CUDA-capable GPU environment is strongly recommended, especially for:
+Performance expectations:
 
-- 0.5B track: better suited to coursework, Colab, or moderate VRAM environments
-- 1.5B track: better suited to larger VRAM environments and longer runs
+- 0.5B track: the most practical option for coursework replication, faster iteration, and lower VRAM usage
+- 1.5B track: significantly heavier, slower, and more sensitive to available GPU memory
+- PPO notebooks: usually the most expensive stage because they depend on both prior model outputs and reinforcement-learning training
 
-If the goal is to verify the workflow quickly, start with the 0.5B track.
+Practical recommendation:
+
+- start with the 0.5B notebooks if your goal is to verify the pipeline quickly
+- use the 1.5B notebooks only when you have enough runtime budget and GPU memory
+- if Colab free-tier resources are unstable, rerun from the last completed saved stage rather than restarting the full pipeline
+
+### Dependencies in Colab
+
+The notebooks already contain package installation cells, so no manual environment setup is required before opening them in the browser.
+
+If Colab asks for a runtime restart after installation, restart the runtime and continue running the notebook from the next required step.
 
 ## 6. Running the Project
 
@@ -114,6 +139,7 @@ This means:
 
 - Each stage writes its training artifacts to Google Drive
 - PPO and comparison notebooks load model outputs saved by earlier stages
+- When the notebooks are run in Colab, the saved models, checkpoints, logs, and result files are stored in Google Drive rather than only inside the temporary Colab session
 
 ### Option B: Local execution
 
@@ -149,7 +175,7 @@ RLHF4LLMs/
         └── 04_Compare_Results_HH_RLHF.ipynb
 ```
 
-After running notebooks, the repository root will usually also contain experiment directories such as:
+After running notebooks, experiment directories such as the following will be created:
 
 ```text
 sft_baseline_lora/
@@ -161,6 +187,11 @@ ppo_minimal_qwen25_1p5b_lora/
 ppo_hh_rlhf_qwen25_1p5b_lora/
 compare_results_.../
 ```
+
+Where these directories are stored depends on the runtime:
+
+- In Google Colab, they are typically saved under Google Drive, usually inside `/content/drive/MyDrive/RLHF4LLMs`
+- In local execution, they are typically created under the local repository root
 
 These run directories typically contain:
 
@@ -214,18 +245,27 @@ To keep the resulting directory structure consistent with this project, it is re
 
 ## 10. Cross-Platform Notes
 
-The core dependencies are standard Python packages, so the project can in principle be deployed on:
+This project is primarily intended to run in Google Colab.
+
+In practice, that means the operating system matters much less than the ability to use a modern web browser and access Colab.
+
+If a system can:
+
+- open a browser
+- access Google Colab
+- connect to Google Drive
+
+then it can be used to run this project workflow.
+
+This makes the project broadly usable from:
 
 - macOS
+- Windows
 - Linux
-- Windows via WSL2
-- Google Colab
+- ChromeOS
+- other browser-capable systems
 
-However:
-
-- `bitsandbytes` support varies across operating systems
-- GPU, CUDA, and driver versions strongly affect runtime success
-- If local setup is unreliable, Colab is the safer replication path
+Because the main execution environment is Colab, local differences in Python setup, CUDA installation, and package compatibility are less important than they would be in a fully local workflow.
 
 ## 11. Sharing and Submission Guidance
 
@@ -240,22 +280,3 @@ To keep the repository as a reproducible working repository instead of a model-a
 - The project is notebook-first, not a packaged Python module
 - No dataset copies are bundled in the repository
 - The notebooks are organized more cleanly now, but some path logic may still assume a repository-root execution context
-
-## 13. Quick Start
-
-```bash
-git clone <your-repo-url>
-cd RLHF4LLMs
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-Then open and run notebooks in this order:
-
-- `notebooks/sft/01_SFT_Baseline.ipynb`
-- `notebooks/reward_model/02_Reward_Model.ipynb`
-- `notebooks/PPO/03_PPO.ipynb`
-- `notebooks/analysis/04_Compare_Results_HH_RLHF.ipynb`
-
-For a more stable end-to-end coursework replication setup, Google Colab with Google Drive storage is the recommended path.
